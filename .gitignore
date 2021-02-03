@@ -1,0 +1,6 @@
+/prebuilt/
+/test.yaml
+/test/main.go
+/snap.login
+*.exe
+/utils/bindata.go

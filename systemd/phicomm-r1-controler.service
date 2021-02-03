@@ -1,0 +1,13 @@
+[Unit]
+Description=Phicomm r1 controler
+After=network.target
+
+[Service]
+Type=simple
+User=nobody
+Restart=on-failure
+RestartSec=5s
+ExecStart=/usr/local/bin/phicomm-r1-controler -c /etc/phicomm-r1-controler/phicomm-r1-controler.yaml
+
+[Install]
+WantedBy=multi-user.target

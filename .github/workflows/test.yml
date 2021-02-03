@@ -1,0 +1,28 @@
+name: Test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  phicomm-r1-controler:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      -
+        name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.15
+      - name: Generate golang src
+        run: go generate ./...
+      - name: Test golang src
+        run: go test ./...
+      - name: Build golang src
+        run: go build
