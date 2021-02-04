@@ -2,20 +2,31 @@ package config
 
 import (
 	"fmt"
-	"github.com/IoTDevice/phicomm-r1-controler/models"
+	adb "github.com/mDNSService/goadb"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
+	"sync"
 )
+
+var WG sync.WaitGroup
 
 var ConfigFileName = "phicomm-r1-controler.yaml"
 var ConfigFilePath = fmt.Sprintf("./%s", ConfigFileName)
-var ConfigModel = &models.ConfigModel{}
+var ConfigModelVar = &ConfigModel{
+	ADBConfig: &adb.ServerConfig{PathToAdb: ""},
+	NetworkDevices: map[string]*Device{
+		"192.168.123.146:5555": {
+			Host: "192.168.123.146",
+			Port: 5555,
+		},
+	},
+}
 
 //将配置写入指定的路径的文件
-func WriteConfigFile(ConfigMode *models.ConfigModel, path string) (err error) {
+func WriteConfigFile(ConfigMode *ConfigModel, path string) (err error) {
 	configByte, err := yaml.Marshal(ConfigMode)
 	if err != nil {
 		log.Fatalln(err.Error())
@@ -33,7 +44,7 @@ func InitConfigFile() {
 	if err != nil {
 		return
 	}
-	err = WriteConfigFile(ConfigModel, ConfigFilePath)
+	err = WriteConfigFile(ConfigModelVar, ConfigFilePath)
 	if err == nil {
 		fmt.Println("config created")
 		return
@@ -49,7 +60,7 @@ func UseConfigFile() {
 		log.Fatalln(err.Error())
 		return
 	}
-	err = yaml.Unmarshal(content, ConfigModel)
+	err = yaml.Unmarshal(content, ConfigModelVar)
 	if err != nil {
 		log.Fatalln(err.Error())
 		return

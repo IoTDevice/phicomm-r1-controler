@@ -1,6 +1,9 @@
-accessid: '*AccessId'
-accesskey: '*AccessKey'
-maindomain: '*example.com'
-subdomainname: '*www'
-checkupdateinterval: 30
-protocol: all
+adbconfig:
+  pathtoadb: ""
+  host: ""
+  port: 0
+  dialer: null
+networkdevices:
+  192.168.123.146:5555:
+    host: 192.168.123.146
+    port: 5555
