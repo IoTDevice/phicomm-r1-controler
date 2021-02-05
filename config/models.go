@@ -2,6 +2,7 @@ package config
 
 import (
 	"bytes"
+	"fmt"
 	"github.com/OpenIoTHub/service-register/nettool"
 	"github.com/gin-gonic/gin"
 	"github.com/iotdevice/zeroconf"
@@ -172,8 +173,10 @@ func (ao *AndroidAdbDeviceWithOpenIoTHub) RegMdns() {
 	var err error
 	//mdns注册
 	info := nettool.MDNSServiceBaseInfo
+	info["name"] = fmt.Sprintf("斐讯R1音箱-%s", ao.Id)
 	info["id"] = ao.Id
 	info["model"] = "com.iotserv.devices.phicomm-r1-controler"
+	info["firmware-respository"] = "https://github.com/IoTDevice/phicomm-r1-controler"
 	port := ao.listener.Addr().(*net.TCPAddr).Port
 	log.Printf("info:%+v", info)
 	log.Println("port:", port)
