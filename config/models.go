@@ -13,6 +13,7 @@ import (
 	"net"
 	"os/exec"
 	"path"
+	"strings"
 	"time"
 )
 
@@ -169,6 +170,23 @@ func (ao *AndroidAdbDeviceWithOpenIoTHub) StartAPIServer() {
 			"code":    0,
 			"message": "",
 			"result":  rst,
+		})
+	})
+	//获取安装的软件包
+	r.GET("/list-packages", func(c *gin.Context) {
+		var packages []string
+		rst, err := ao.RunCommand("/system/bin/pm", "list", "packages")
+		if err != nil {
+			herr(err, c)
+			return
+		}
+		rst = strings.Replace(rst, "package:", "", -1)
+		packages = strings.Split(rst, "\r\n")
+		log.Println(packages)
+		c.JSON(200, gin.H{
+			"code":    0,
+			"message": "",
+			"result":  packages,
 		})
 	})
 	err = r.RunListener(ao.listener)
