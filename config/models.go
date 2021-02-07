@@ -3,25 +3,22 @@ package config
 import (
 	"bytes"
 	"fmt"
+	"github.com/IoTDevice/phicomm-r1-controler/utils"
 	"github.com/OpenIoTHub/service-register/nettool"
 	"github.com/gin-gonic/gin"
 	"github.com/iotdevice/zeroconf"
 	adb "github.com/mDNSService/goadb"
-	"io"
 	"io/ioutil"
 	"log"
 	"net"
+	"os/exec"
+	"path"
 	"time"
 )
 
 type ConfigModel struct {
 	ADBConfig      *adb.ServerConfig
-	NetworkDevices map[string]*Device
-}
-
-type Device struct {
-	Host string //Ip
-	Port int    //default 5555
+	NetworkDevices []string
 }
 
 type AndroidAdbDeviceWithOpenIoTHub struct {
@@ -57,6 +54,7 @@ func (ao *AndroidAdbDeviceWithOpenIoTHub) StartAPIServer() {
 	var err error
 	//将自己注册为OpenIoTHub设备
 	r := gin.Default()
+	r.MaxMultipartMemory = 1 << 20
 	//获取屏幕截图
 	r.GET("/get-image", func(c *gin.Context) {
 		_, err := ao.RunCommand("screencap", "-p", "/data/local/tmp/tmp.png")
@@ -97,26 +95,37 @@ func (ao *AndroidAdbDeviceWithOpenIoTHub) StartAPIServer() {
 	})
 	//安装apk
 	r.POST("/install-apk", func(c *gin.Context) {
+		unixT := time.Now().Unix()
+		tmpfilepath := path.Join(utils.GetTmpDir(), fmt.Sprintf("%d.apk", unixT))
+		log.Println("tmpfilepath:", tmpfilepath)
+
 		file, err := c.FormFile("android.apk")
+		err = c.SaveUploadedFile(file, tmpfilepath)
 		if err != nil {
+			log.Println("err = c.SaveUploadedFile(file, tmpfilepath)")
 			herr(err, c)
 			return
 		}
-		w, err := ao.Device.OpenWrite("/data/local/tmp/android.apk", 777, time.Time{})
-		if err != nil {
-			herr(err, c)
-			return
+		defer func() {
+			cmd := exec.Command("rm", tmpfilepath)
+			out, _ := cmd.Output()
+			log.Println(string(out))
+		}()
+
+		r1apkfile := fmt.Sprintf("/data/local/tmp/%d.apk", unixT)
+		s, err := ao.Serial()
+		var cmdname = "adb"
+		if ConfigModelVar.ADBConfig.PathToAdb != "" {
+			cmdname = ConfigModelVar.ADBConfig.PathToAdb
 		}
-		defer w.Close()
-		r, err := file.Open()
+		cmd := exec.Command(cmdname, "-s", s, "push", tmpfilepath, r1apkfile)
+		out, err := cmd.Output()
+		log.Println(string(out))
+		defer ao.RunCommand("rm", r1apkfile)
+
+		rst, err := ao.RunCommand("/system/bin/pm", "install", "-t", r1apkfile)
 		if err != nil {
-			herr(err, c)
-			return
-		}
-		defer r.Close()
-		io.Copy(w, r)
-		rst, err := ao.RunCommand("/system/bin/pm", "install", "-t", "/data/local/tmp/android.apk")
-		if err != nil {
+			log.Println("/system/bin/pm")
 			herr(err, c)
 			return
 		}
@@ -167,6 +176,8 @@ func (ao *AndroidAdbDeviceWithOpenIoTHub) StartAPIServer() {
 		log.Println(err)
 		return
 	}
+	//	查看所有软件包
+	//  卸载指定软件包
 }
 
 func (ao *AndroidAdbDeviceWithOpenIoTHub) RegMdns() {

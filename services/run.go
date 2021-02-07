@@ -6,6 +6,8 @@ import (
 	adb "github.com/mDNSService/goadb"
 	"github.com/urfave/cli/v2"
 	"log"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -19,7 +21,17 @@ func Run(c *cli.Context) (err error) {
 	}
 	//连接配置文件的所有网络安卓adb设备
 	for _, device := range config.ConfigModelVar.NetworkDevices {
-		err := adbClient.Connect(device.Host, device.Port)
+		var ip string
+		var port int
+		if sn := strings.SplitN(device, ":", 2); strings.Contains(device, ":") && len(sn) == 2 {
+			ip = sn[0]
+			port, err = strconv.Atoi(sn[1])
+
+		} else {
+			ip = device
+			port = 5555
+		}
+		err := adbClient.Connect(ip, port)
 		if err != nil {
 			log.Println(err)
 		}

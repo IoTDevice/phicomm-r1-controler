@@ -16,13 +16,8 @@ var WG sync.WaitGroup
 var ConfigFileName = "phicomm-r1-controler.yaml"
 var ConfigFilePath = fmt.Sprintf("./%s", ConfigFileName)
 var ConfigModelVar = &ConfigModel{
-	ADBConfig: &adb.ServerConfig{PathToAdb: ""},
-	NetworkDevices: map[string]*Device{
-		"192.168.123.146:5555": {
-			Host: "192.168.123.146",
-			Port: 5555,
-		},
-	},
+	ADBConfig:      &adb.ServerConfig{PathToAdb: ""},
+	NetworkDevices: []string{"192.168.123.146:5555"},
 }
 
 //将配置写入指定的路径的文件
