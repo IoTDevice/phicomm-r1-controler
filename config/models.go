@@ -13,6 +13,7 @@ import (
 	"net"
 	"os/exec"
 	"path"
+	"path/filepath"
 	"strings"
 	"time"
 )
@@ -63,12 +64,22 @@ func (ao *AndroidAdbDeviceWithOpenIoTHub) StartAPIServer() {
 			herr(err, c)
 			return
 		}
-		reader, err := ao.OpenRead("/data/local/tmp/tmp.png")
+
+		unixT := time.Now().Unix()
+		tmpfilepath := path.Join(utils.GetTmpDir(), fmt.Sprintf("%d.png", unixT))
+
+		_, err = ao.RunAdbCommand("pull", "/data/local/tmp/tmp.png", tmpfilepath)
 		if err != nil {
 			herr(err, c)
 			return
 		}
-		bs, err := ioutil.ReadAll(reader)
+		defer func() {
+			cmd := exec.Command("rm", tmpfilepath)
+			out, _ := cmd.Output()
+			log.Println(string(out))
+		}()
+		bs, err := ioutil.ReadFile(tmpfilepath)
+
 		if err != nil {
 			herr(err, c)
 			return
@@ -214,4 +225,46 @@ func (ao *AndroidAdbDeviceWithOpenIoTHub) RegMdns() {
 		log.Println(err)
 		return
 	}
+}
+
+func (ao *AndroidAdbDeviceWithOpenIoTHub) RunCommand(cmd string, args ...string) (string, error) {
+	var name = "adb"
+	if ConfigModelVar.ADBConfig.PathToAdb != "" {
+		name = ConfigModelVar.ADBConfig.PathToAdb
+	}
+
+	cmdOut := &exec.Cmd{
+		Path: name,
+		Args: append([]string{name, "shell", cmd}, args...),
+	}
+	if filepath.Base(name) == name {
+		if lp, err := exec.LookPath(name); err != nil {
+			return "", err
+		} else {
+			cmdOut.Path = lp
+		}
+	}
+	outbytes, err := cmdOut.Output()
+	return string(outbytes), err
+}
+
+func (ao *AndroidAdbDeviceWithOpenIoTHub) RunAdbCommand(args ...string) (string, error) {
+	var name = "adb"
+	if ConfigModelVar.ADBConfig.PathToAdb != "" {
+		name = ConfigModelVar.ADBConfig.PathToAdb
+	}
+
+	cmdOut := &exec.Cmd{
+		Path: name,
+		Args: append([]string{name}, args...),
+	}
+	if filepath.Base(name) == name {
+		if lp, err := exec.LookPath(name); err != nil {
+			return "", err
+		} else {
+			cmdOut.Path = lp
+		}
+	}
+	outbytes, err := cmdOut.Output()
+	return string(outbytes), err
 }
