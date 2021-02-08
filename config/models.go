@@ -232,10 +232,13 @@ func (ao *AndroidAdbDeviceWithOpenIoTHub) RunCommand(cmd string, args ...string)
 	if ConfigModelVar.ADBConfig.PathToAdb != "" {
 		name = ConfigModelVar.ADBConfig.PathToAdb
 	}
-
+	s, err := ao.Serial()
+	if err != nil {
+		return "", err
+	}
 	cmdOut := &exec.Cmd{
 		Path: name,
-		Args: append([]string{name, "shell", cmd}, args...),
+		Args: append([]string{name, "-s", s, "shell", cmd}, args...),
 	}
 	if filepath.Base(name) == name {
 		if lp, err := exec.LookPath(name); err != nil {
@@ -253,10 +256,14 @@ func (ao *AndroidAdbDeviceWithOpenIoTHub) RunAdbCommand(args ...string) (string,
 	if ConfigModelVar.ADBConfig.PathToAdb != "" {
 		name = ConfigModelVar.ADBConfig.PathToAdb
 	}
+	s, err := ao.Serial()
+	if err != nil {
+		return "", err
+	}
 
 	cmdOut := &exec.Cmd{
 		Path: name,
-		Args: append([]string{name}, args...),
+		Args: append([]string{name, "-s", s}, args...),
 	}
 	if filepath.Base(name) == name {
 		if lp, err := exec.LookPath(name); err != nil {

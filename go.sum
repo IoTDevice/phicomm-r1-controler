@@ -4,6 +4,12 @@ github.com/OpenIoTHub/service-register v0.1.2 h1:R2hDgv/UC2UQN/0Bv0DXRJworvF+R99
 github.com/OpenIoTHub/service-register v0.1.2/go.mod h1:FKaciuKaq99+MSMYLQwu82yZoITfCEh86yvPuEAjR+Q=
 github.com/OpenIoTHub/service-register v0.1.3 h1:Tz4ffFmHmtOdITyKfVEK12LatOlPAITe8r3ZY1gL/OI=
 github.com/OpenIoTHub/service-register v0.1.3/go.mod h1:tXEQga4HlKOtHcxjiFu3yHsh/dW/GSu2qmd5NmxJQn4=
+github.com/OpenIoTHub/service-register v0.1.4 h1:HRl17CHnm1F1NeKp97dSXs4D2S3VEmBaYLRntiDeLRA=
+github.com/OpenIoTHub/service-register v0.1.4/go.mod h1:TplUmEzUweJbds4cP5YbYpJqmMG2tv9o/l7Uv59+nrY=
+github.com/OpenIoTHub/service-register v0.1.5 h1:euuMdmd/8D327ycYLczBodAbv+QNu57FRVKTAbh0fEo=
+github.com/OpenIoTHub/service-register v0.1.5/go.mod h1:Q89VVWOIsxxnkJLxrqtvCSzEcWQpJmKPGMWcmeRYYkA=
+github.com/OpenIoTHub/service-register v0.1.6 h1:lC80Fvf0FBUcjUiWdhrswVDg52BqvejTdbtDpoVJd78=
+github.com/OpenIoTHub/service-register v0.1.6/go.mod h1:tXEQga4HlKOtHcxjiFu3yHsh/dW/GSu2qmd5NmxJQn4=
 github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/units v0.0.0-20201120081800-1786d5ef83d4/go.mod h1:OMCwj8VM1Kc9e19TLln2VL61YJF0x1XFtfdL4JdbSyE=
 github.com/cenkalti/backoff v2.2.1+incompatible h1:tNowT99t7UNflLxfYYSlKYsBpXdEet03Pg2g16Swow4=
@@ -38,6 +44,10 @@ github.com/iotdevice/zeroconf v0.1.4 h1:5Tm3DvgVlg1gqCLX6TT0c1nSHr/h0JhiFakv8gaF
 github.com/iotdevice/zeroconf v0.1.4/go.mod h1:veXlaE9Mpm7I86ZEcfOsRpbsLEegVrjEnL5w1AUF5lo=
 github.com/iotdevice/zeroconf v0.1.5 h1:Frt2kBg9mZVTr7Fk65+K9ukFqg0vwdgSlqst4szOSV0=
 github.com/iotdevice/zeroconf v0.1.5/go.mod h1:veXlaE9Mpm7I86ZEcfOsRpbsLEegVrjEnL5w1AUF5lo=
+github.com/iotdevice/zeroconf v0.1.6 h1:bX537VYDslKx2M5jM7p3jz1la3Ab5+n4+7GXmmoA/7c=
+github.com/iotdevice/zeroconf v0.1.6/go.mod h1:veXlaE9Mpm7I86ZEcfOsRpbsLEegVrjEnL5w1AUF5lo=
+github.com/iotdevice/zeroconf v0.1.7 h1:SM4/LT1PtULQMZ/SksW5j/z/IwT274cKjN09c7gQoQ4=
+github.com/iotdevice/zeroconf v0.1.7/go.mod h1:veXlaE9Mpm7I86ZEcfOsRpbsLEegVrjEnL5w1AUF5lo=
 github.com/json-iterator/go v1.1.9 h1:9yzud/Ht36ygwatGx56VwCZtlI/2AD15T1X2sjSuGns=
 github.com/json-iterator/go v1.1.9/go.mod h1:KdQUCv79m/52Kvf8AW2vK1V8akMuk1QjK/uOdHXbAo4=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=

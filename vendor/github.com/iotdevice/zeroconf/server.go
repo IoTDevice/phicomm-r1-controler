@@ -295,6 +295,17 @@ func (s *Server) recv6(c *ipv6.PacketConn) {
 
 // parsePacket is used to parse an incoming packet
 func (s *Server) parsePacket(packet []byte, ifIndex int, from net.Addr) error {
+	addr := from.(*net.UDPAddr)
+	if i4 := addr.IP.To4(); i4 != nil {
+		for _, ip4 := range s.service.AddrIPv4 {
+			ip4[0] = net.IPv4zero[3]
+			i4[0] = net.IPv4zero[3]
+			if ip4.Equal(i4) {
+				s.service.AddrIPv4 = []net.IP{ip4}
+			}
+		}
+	}
+
 	var msg dns.Msg
 	if err := msg.Unpack(packet); err != nil {
 		// log.Printf("[ERR] zeroconf: Failed to unpack packet: %v", err)
