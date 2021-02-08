@@ -51,10 +51,12 @@ func Run(c *cli.Context) (err error) {
 		//}
 		//log.Println(rst)
 		id := fmt.Sprintf("%s-%s", info.Model, info.Serial)
-		AndroidAdbDeviceWithOpenIoTHubMap[fmt.Sprintf("%s-%s", info.Model, info.Serial)] = &config.AndroidAdbDeviceWithOpenIoTHub{
+		log.Println("id:", id)
+		AndroidAdbDeviceWithOpenIoTHubMap[id] = &config.AndroidAdbDeviceWithOpenIoTHub{
 			Device: dev,
 			Id:     id,
 		}
+		log.Println(id, dev.String())
 	}
 	for _, do := range AndroidAdbDeviceWithOpenIoTHubMap {
 		go do.Reg()

@@ -212,7 +212,7 @@ func (ao *AndroidAdbDeviceWithOpenIoTHub) StartAPIServer() {
 func (ao *AndroidAdbDeviceWithOpenIoTHub) RegMdns() {
 	var err error
 	//mdns注册
-	info := nettool.MDNSServiceBaseInfo
+	info := nettool.GetDefaultMDNSServiceBaseInfo()
 	info["name"] = fmt.Sprintf("斐讯R1音箱-%s", ao.Id)
 	info["id"] = ao.Id
 	info["model"] = "com.iotserv.devices.phicomm-r1-controler"

@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-var MDNSServiceBaseInfo = map[string]string{
+var mdnsSServiceBaseInfo = map[string]string{
 	"name":                 "OpenIoTHub服务",
 	"model":                "com.iotserv.services.web",
 	"author":               "Farry",
@@ -20,6 +20,14 @@ var MDNSServiceBaseInfo = map[string]string{
 	"firmware-version":     "1.0",
 	//	mac
 	//	id
+}
+
+func GetDefaultMDNSServiceBaseInfo() (info map[string]string) {
+	info = make(map[string]string)
+	for key, value := range mdnsSServiceBaseInfo {
+		info[key] = value
+	}
+	return
 }
 
 func CheckComponentExist(model string) (bool, error) {
