@@ -88,7 +88,7 @@ nfpms:
 snapcrafts:
   - name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}'
     summary: Phicomm R1 Controler.
-    name: onvif
+    name: phicomm-r1-controler
     description: |
       Phicomm R1 Controler
     grade: stable
