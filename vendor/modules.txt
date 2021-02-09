@@ -1,8 +1,8 @@
-# github.com/OpenIoTHub/service-register v0.1.8
+# github.com/OpenIoTHub/service-register v0.1.9
 ## explicit
 github.com/OpenIoTHub/service-register/nettool
-# github.com/cenkalti/backoff/v4 v4.1.0
-github.com/cenkalti/backoff/v4
+# github.com/cenkalti/backoff v2.2.1+incompatible
+github.com/cenkalti/backoff
 # github.com/cpuguy83/go-md2man/v2 v2.0.0-20190314233015-f79a8a8ca69d
 github.com/cpuguy83/go-md2man/v2/md2man
 # github.com/gin-contrib/sse v0.1.0
@@ -14,8 +14,6 @@ github.com/gin-gonic/gin/binding
 github.com/gin-gonic/gin/internal/bytesconv
 github.com/gin-gonic/gin/internal/json
 github.com/gin-gonic/gin/render
-# github.com/go-bindata/go-bindata v3.1.2+incompatible
-## explicit
 # github.com/go-playground/locales v0.13.0
 github.com/go-playground/locales
 github.com/go-playground/locales/currency
@@ -25,9 +23,11 @@ github.com/go-playground/universal-translator
 github.com/go-playground/validator/v10
 # github.com/golang/protobuf v1.3.3
 github.com/golang/protobuf/proto
+# github.com/grandcat/zeroconf v1.0.0
+## explicit
+github.com/grandcat/zeroconf
 # github.com/iotdevice/zeroconf v0.1.7
 ## explicit
-github.com/iotdevice/zeroconf
 # github.com/json-iterator/go v1.1.9
 github.com/json-iterator/go
 # github.com/leodido/go-urn v1.2.0

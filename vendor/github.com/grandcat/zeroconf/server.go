@@ -295,17 +295,6 @@ func (s *Server) recv6(c *ipv6.PacketConn) {
 
 // parsePacket is used to parse an incoming packet
 func (s *Server) parsePacket(packet []byte, ifIndex int, from net.Addr) error {
-	addr := from.(*net.UDPAddr)
-	if i4 := addr.IP.To4(); i4 != nil {
-		for _, ip4 := range s.service.AddrIPv4 {
-			ip4[0] = net.IPv4zero[3]
-			i4[0] = net.IPv4zero[3]
-			if ip4.Equal(i4) {
-				s.service.AddrIPv4 = []net.IP{ip4}
-			}
-		}
-	}
-
 	var msg dns.Msg
 	if err := msg.Unpack(packet); err != nil {
 		// log.Printf("[ERR] zeroconf: Failed to unpack packet: %v", err)
@@ -677,14 +666,6 @@ func addrsForInterface(iface *net.Interface) ([]net.IP, []net.IP) {
 	}
 	if len(v6) == 0 {
 		v6 = v6local
-	}
-	//如果ipv4有多个并且包含"192.168"这样的ip就只留这样的ip。ipv4公网怎么办？
-	if len(v4) > 1 {
-		for _, ip := range v4 {
-			if v4 := ip.To4(); v4 != nil && v4[0] == 192 && v4[1] == 168 {
-				return []net.IP{ip}, v6
-			}
-		}
 	}
 	return v4, v6
 }

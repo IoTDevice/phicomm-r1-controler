@@ -6,7 +6,7 @@ import (
 	"github.com/IoTDevice/phicomm-r1-controler/utils"
 	"github.com/OpenIoTHub/service-register/nettool"
 	"github.com/gin-gonic/gin"
-	"github.com/iotdevice/zeroconf"
+	"github.com/grandcat/zeroconf"
 	adb "github.com/mDNSService/goadb"
 	"io/ioutil"
 	"log"
