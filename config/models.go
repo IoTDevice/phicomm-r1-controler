@@ -68,7 +68,7 @@ func (ao *AndroidAdbDeviceWithOpenIoTHub) StartAPIServer() {
 		unixT := time.Now().Unix()
 		tmpfilepath := path.Join(utils.GetTmpDir(), fmt.Sprintf("%d.png", unixT))
 
-		_, err = ao.RunAdbCommand("pull", "/data/local/tmp/tmp.png", tmpfilepath)
+		_, err = ao.RunAdbCommand([]string{"pull", "/data/local/tmp/tmp.png", tmpfilepath})
 		if err != nil {
 			herr(err, c)
 			return
@@ -94,7 +94,8 @@ func (ao *AndroidAdbDeviceWithOpenIoTHub) StartAPIServer() {
 	r.GET("/do-cmd", func(c *gin.Context) {
 		cmd := c.Query("cmd")
 		log.Println(cmd)
-		rst, err := ao.RunCommand(cmd)
+		cmdSlic := strings.Split(cmd, " ")
+		rst, err := ao.RunAdbSellCommandWithSlice(cmdSlic)
 		if err != nil {
 			herr(err, c)
 			return
@@ -125,15 +126,10 @@ func (ao *AndroidAdbDeviceWithOpenIoTHub) StartAPIServer() {
 		}()
 
 		r1apkfile := fmt.Sprintf("/data/local/tmp/%d.apk", unixT)
-		s, err := ao.Serial()
-		var cmdname = "adb"
-		if ConfigModelVar.ADBConfig.PathToAdb != "" {
-			cmdname = ConfigModelVar.ADBConfig.PathToAdb
-		}
-		cmd := exec.Command(cmdname, "-s", s, "push", tmpfilepath, r1apkfile)
-		out, err := cmd.Output()
-		log.Println(string(out))
-		defer ao.RunCommand("rm", r1apkfile)
+		out, err := ao.RunAdbCommand([]string{"push", tmpfilepath, r1apkfile})
+		log.Println(out)
+
+		defer ao.RunAdbCommand([]string{"rm", r1apkfile})
 
 		rst, err := ao.RunCommand("/system/bin/pm", "install", "-t", r1apkfile)
 		if err != nil {
@@ -226,31 +222,8 @@ func (ao *AndroidAdbDeviceWithOpenIoTHub) RegMdns() {
 	}
 }
 
-func (ao *AndroidAdbDeviceWithOpenIoTHub) RunCommand(cmd string, args ...string) (string, error) {
-	var name = "adb"
-	if ConfigModelVar.ADBConfig.PathToAdb != "" {
-		name = ConfigModelVar.ADBConfig.PathToAdb
-	}
-	s, err := ao.Serial()
-	if err != nil {
-		return "", err
-	}
-	cmdOut := &exec.Cmd{
-		Path: name,
-		Args: append([]string{name, "-s", s, "shell", cmd}, args...),
-	}
-	if filepath.Base(name) == name {
-		if lp, err := exec.LookPath(name); err != nil {
-			return "", err
-		} else {
-			cmdOut.Path = lp
-		}
-	}
-	outbytes, err := cmdOut.Output()
-	return string(outbytes), err
-}
-
-func (ao *AndroidAdbDeviceWithOpenIoTHub) RunAdbCommand(args ...string) (string, error) {
+//执行adb的命令
+func (ao *AndroidAdbDeviceWithOpenIoTHub) RunAdbCommand(args []string) (string, error) {
 	var name = "adb"
 	if ConfigModelVar.ADBConfig.PathToAdb != "" {
 		name = ConfigModelVar.ADBConfig.PathToAdb
@@ -273,4 +246,14 @@ func (ao *AndroidAdbDeviceWithOpenIoTHub) RunAdbCommand(args ...string) (string,
 	}
 	outbytes, err := cmdOut.Output()
 	return string(outbytes), err
+}
+
+//执行adb shell 命令
+func (ao *AndroidAdbDeviceWithOpenIoTHub) RunCommand(cmd string, args ...string) (string, error) {
+	return ao.RunAdbCommand(append([]string{"shell", cmd}, args...))
+}
+
+//执行adb shell 命令
+func (ao *AndroidAdbDeviceWithOpenIoTHub) RunAdbSellCommandWithSlice(args []string) (string, error) {
+	return ao.RunAdbCommand(append([]string{"shell"}, args...))
 }
