@@ -106,5 +106,5 @@ func RegistermDNSService(info map[string]string, port int) (*zeroconf.Server, er
 	for key, value := range info {
 		txt = append(txt, fmt.Sprintf("%s=%s", key, value))
 	}
-	return zeroconf.Register(fmt.Sprintf("%s-%s", info["model"], info["mac"]), "_iotdevice._tcp", "local.", port, txt, nil)
+	return zeroconf.Register(info["id"], "_iotdevice._tcp", "local.", port, txt, nil)
 }
