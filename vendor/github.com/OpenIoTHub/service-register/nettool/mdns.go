@@ -18,8 +18,8 @@ var mdnsSServiceBaseInfo = map[string]string{
 	"home-page":            "https://github.com/OpenIoTHub",
 	"firmware-respository": "https://github.com/iotdevice",
 	"firmware-version":     "1.0",
-	//	mac
-	//	id
+	"mac":                  uuid.Must(uuid.NewV4()).String(),
+	"id":                   uuid.Must(uuid.NewV4()).String(),
 }
 
 func GetDefaultMDNSServiceBaseInfo() (info map[string]string) {

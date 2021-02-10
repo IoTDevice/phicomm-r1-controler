@@ -53,8 +53,8 @@ func Run(c *cli.Context) (err error) {
 		id := fmt.Sprintf("%s-%s", info.Model, info.Serial)
 		log.Println("id:", id)
 		AndroidAdbDeviceWithOpenIoTHubMap[id] = &config.AndroidAdbDeviceWithOpenIoTHub{
-			Device: dev,
-			Id:     id,
+			Device:   dev,
+			SerialID: info.Serial,
 		}
 		log.Println(id, dev.String())
 	}

@@ -25,7 +25,7 @@ type ConfigModel struct {
 
 type AndroidAdbDeviceWithOpenIoTHub struct {
 	*adb.Device
-	Id             string
+	SerialID       string
 	listener       net.Listener
 	zeroconfServer *zeroconf.Server
 }
@@ -213,8 +213,7 @@ func (ao *AndroidAdbDeviceWithOpenIoTHub) RegMdns() {
 	var err error
 	//mdns注册
 	info := nettool.GetDefaultMDNSServiceBaseInfo()
-	info["name"] = fmt.Sprintf("斐讯R1音箱-%s", ao.Id)
-	info["id"] = ao.Id
+	info["name"] = fmt.Sprintf("斐讯R1音箱-%s", ao.SerialID)
 	info["model"] = "com.iotserv.devices.phicomm-r1-controler"
 	info["firmware-respository"] = "https://github.com/IoTDevice/phicomm-r1-controler"
 	port := ao.listener.Addr().(*net.TCPAddr).Port

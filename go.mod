@@ -3,7 +3,7 @@ module github.com/IoTDevice/phicomm-r1-controler
 go 1.15
 
 require (
-	github.com/OpenIoTHub/service-register v0.1.10
+	github.com/OpenIoTHub/service-register v0.1.11
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-bindata/go-bindata v3.1.2+incompatible // indirect
 	github.com/grandcat/zeroconf v1.0.0
