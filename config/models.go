@@ -129,7 +129,14 @@ func (ao *AndroidAdbDeviceWithOpenIoTHub) StartAPIServer() {
 		out, err := ao.RunAdbCommand([]string{"push", tmpfilepath, r1apkfile})
 		log.Println(out)
 
-		defer ao.RunAdbCommand([]string{"rm", r1apkfile})
+		defer func() {
+			out, err := ao.RunAdbCommand([]string{"rm", r1apkfile})
+			if err != nil {
+				log.Println(err)
+				return
+			}
+			log.Println(out)
+		}()
 
 		rst, err := ao.RunCommand("/system/bin/pm", "install", "-t", r1apkfile)
 		if err != nil {
@@ -201,8 +208,9 @@ func (ao *AndroidAdbDeviceWithOpenIoTHub) StartAPIServer() {
 		log.Println(err)
 		return
 	}
-	//	查看所有软件包
-	//  卸载指定软件包
+	//	安装DLAN
+
+	//	安装ROOT
 }
 
 func (ao *AndroidAdbDeviceWithOpenIoTHub) RegMdns() {
