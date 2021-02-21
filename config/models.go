@@ -106,6 +106,22 @@ func (ao *AndroidAdbDeviceWithOpenIoTHub) StartAPIServer() {
 			"result":  rst,
 		})
 	})
+	//执行ADB命令,比如：adb {...}
+	r.GET("/do-adb-cmd", func(c *gin.Context) {
+		cmd := c.Query("cmd")
+		log.Println(cmd)
+		cmdSlic := strings.Split(cmd, " ")
+		rst, err := ao.RunAdbCommand(cmdSlic)
+		if err != nil {
+			herr(err, c)
+			return
+		}
+		c.JSON(200, gin.H{
+			"code":    0,
+			"message": "",
+			"result":  rst,
+		})
+	})
 	//安装apk
 	r.POST("/install-apk", func(c *gin.Context) {
 		unixT := time.Now().Unix()
