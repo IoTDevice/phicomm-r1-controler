@@ -1,6 +1,8 @@
-FROM golang:1.13-alpine
+FROM ubuntu:latest
 
-RUN apk add --no-cache bash
+RUN add-apt-repository ppa:nilarimogard/webupd8
+RUN apt-get update
+RUN apt-get install android-tools-adb
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD [ "-h" ]

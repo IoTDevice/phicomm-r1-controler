@@ -27,21 +27,11 @@ func Run(c *cli.Context) (err error) {
 		return
 	}
 	//连接配置文件的所有网络安卓adb设备
+	if config.SingleIpPort != "" {
+		ConnectOneDevice(adbClient, config.SingleIpPort)
+	}
 	for _, device := range config.ConfigModelVar.NetworkDevices {
-		var ip string
-		var port int
-		if sn := strings.SplitN(device, ":", 2); strings.Contains(device, ":") && len(sn) == 2 {
-			ip = sn[0]
-			port, err = strconv.Atoi(sn[1])
-
-		} else {
-			ip = device
-			port = 5555
-		}
-		err := adbClient.Connect(ip, port)
-		if err != nil {
-			log.Println(err)
-		}
+		ConnectOneDevice(adbClient, device)
 	}
 	devList, err := adbClient.ListDevices()
 	if err != nil {
@@ -92,4 +82,23 @@ func RunAdbCommand(args []string) (string, error) {
 	}
 	outbytes, err := cmdOut.Output()
 	return string(outbytes), err
+}
+
+func ConnectOneDevice(adbClient *adb.Adb, device string) (err error) {
+	log.Println("connecting :", config.SingleIpPort)
+	var ip string
+	var port int
+	if sn := strings.SplitN(device, ":", 2); strings.Contains(device, ":") && len(sn) == 2 {
+		ip = sn[0]
+		port, err = strconv.Atoi(sn[1])
+
+	} else {
+		ip = device
+		port = 5555
+	}
+	err = adbClient.Connect(ip, port)
+	if err != nil {
+		log.Println(err)
+	}
+	return
 }

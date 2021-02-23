@@ -46,6 +46,25 @@ func main() {
 			},
 		},
 		{
+			Name:    "r1-ip",
+			Aliases: []string{"r"},
+			Usage:   "斐讯R1的ip直接免配置文件运行",
+			Flags: []cli.Flag{
+				&cli.StringFlag{
+					Name:        "ip",
+					Aliases:     []string{"i"},
+					Value:       "",
+					Usage:       "斐讯R1的ip地址",
+					EnvVars:     []string{"R1IP"},
+					Destination: &config.SingleIpPort,
+				},
+			},
+			Action: func(c *cli.Context) error {
+				config.LoadSnapcraftConfigPath()
+				return services.Run(c)
+			},
+		},
+		{
 			Name:    "test",
 			Aliases: []string{"t"},
 			Usage:   "test this command",
