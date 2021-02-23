@@ -34,7 +34,7 @@ func (ao *AndroidAdbDeviceWithOpenIoTHub) Reg() {
 	WG.Add(1)
 	defer WG.Done()
 	var err error
-	ao.listener, err = net.Listen("tcp", ":")
+	ao.listener, err = net.Listen("tcp", fmt.Sprintf(":%d", SingleServicePort))
 	if err != nil {
 		log.Println(err)
 		return

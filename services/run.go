@@ -41,12 +41,6 @@ func Run(c *cli.Context) (err error) {
 		log.Println("List adb devices:")
 		log.Printf("%+v", info)
 		dev := adbClient.Device(adb.DeviceWithSerial(info.Serial))
-		//rst, err := dev.RunCommand("ls")
-		//if err != nil {
-		//	log.Println(err)
-		//	continue
-		//}
-		//log.Println(rst)
 		id := fmt.Sprintf("%s-%s", info.Model, info.Serial)
 		log.Println("id:", id)
 		AndroidAdbDeviceWithOpenIoTHubMap[id] = &config.AndroidAdbDeviceWithOpenIoTHub{

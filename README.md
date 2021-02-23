@@ -14,12 +14,13 @@
 * 如果你想云易连的手机和插件不是同一个网络也能控制，请安装[云易连网关](https://github.com/OpenIoTHub/gateway-go/releases) 如果只需要局域网控制请忽略
 docker 运行：
 ```batch
-docker run openiothub/phicomm-r1-controler:latest r1-ip -i {这里是你的斐讯R1的ip}
+docker run -d -p 2847:2847 openiothub/phicomm-r1-controler:latest r1-ip -i {这里是你的斐讯R1的ip} - p 2847
 ```
 例如：
 ```batch
-docker run openiothub/phicomm-r1-controler:latest r1-ip -i 192.168.123.146
+docker run -d -p 2847:2847 openiothub/phicomm-r1-controler:latest r1-ip -i 192.168.123.146 - p 2847
 ```
+##### 上面2847是容器对外提供服务的端口，如果你不懂但是想换就都换成同一个端口号，基本上小于10000的整数都没啥问题，前提是不会跟其他软件端口号冲突
 ![avatar](./images/ui.jpg)
 ```sh
 phicomm-r1-controler -c /path/to/config/file/phicomm-r1-controler.yaml

@@ -14,6 +14,7 @@ import (
 var WG sync.WaitGroup
 
 var SingleIpPort = ""
+var SingleServicePort = 0
 var ConfigFileName = "phicomm-r1-controler.yaml"
 var ConfigFilePath = fmt.Sprintf("./%s", ConfigFileName)
 var ConfigModelVar = &ConfigModel{

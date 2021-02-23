@@ -58,6 +58,14 @@ func main() {
 					EnvVars:     []string{"R1IP"},
 					Destination: &config.SingleIpPort,
 				},
+				&cli.IntFlag{
+					Name:        "port",
+					Aliases:     []string{"p"},
+					Value:       0,
+					Usage:       "指定提供服务的端口",
+					EnvVars:     []string{"R1PORT"},
+					Destination: &config.SingleServicePort,
+				},
 			},
 			Action: func(c *cli.Context) error {
 				config.LoadSnapcraftConfigPath()
