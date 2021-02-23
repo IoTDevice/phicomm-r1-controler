@@ -1,9 +1,10 @@
 # phicomm-r1-controler
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-white.svg)](https://snapcraft.io/phicomm-r1-controler)
-
+#### 这个程序是运行在你R1音箱同一个局域网中的程序，不是运行在R1上的，你可以将这个程序运行在你的windows电脑或者路由器、nas主机上
 ##### 斐讯R1的控制插件，配合云易连app:https://github.com/OpenIoTHub/OpenIoTHub
-* 首先下载本插件，到(releases page)[releases]下载时候你系统的本插件
-* 手机安装云易连(releases page][https://github.com/OpenIoTHub/OpenIoTHub/releases]
+##### 在同一个局域网里面，APP直接访问这个插件，这个插件操作在同一个局域网中的R1
+* 首先下载本插件，到[releases] page下载适合你系统的本插件，比如windows，linux之类的CPU和x86之类的CPU的组合
+* 手机安装云易连[releases page](https://github.com/OpenIoTHub/OpenIoTHub/releases)
 * 安装本插件的主机需要安装adb并把adb放入系统PATH目录(就是系统终端输入adb回车就能执行adb的状态)
 * 先运行一次本插件，本插件会默认在当前目录生成一个yaml配置文件
 * 按照配置文件的例子配置你的斐讯R1的ip地址
