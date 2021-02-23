@@ -1,6 +1,6 @@
 FROM ubuntu:latest
 
-RUN apt-get install python-software-properties -y
+RUN apt-get update
 RUN apt-get install software-properties-common -y
 RUN add-apt-repository ppa:nilarimogard/webupd8
 RUN apt-get update
