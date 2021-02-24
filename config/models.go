@@ -72,6 +72,9 @@ func (cm *ConfigModel) ListDevices() (devices []*AdbDeviceInfo, err error) {
 		//log.Println(line)
 		serialInfo := strings.SplitN(line, "	", 2)
 		//log.Println(serialInfo[0])
+		if strconv.QuoteToGraphic(serialInfo[0]) == "" {
+			continue
+		}
 		devices = append(devices, &AdbDeviceInfo{Serial: serialInfo[0]})
 	}
 
