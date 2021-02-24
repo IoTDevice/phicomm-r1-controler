@@ -1,12 +1,13 @@
 package utils
 
 import (
+	"github.com/IoTDevice/phicomm-r1-controler/assets"
 	"io/ioutil"
 	"path/filepath"
 )
 
 func ExportFiles(frompath, topath string) (err error) {
-	data, err := Asset(frompath)
+	data, err := assets.Asset(frompath)
 	if err != nil {
 		return
 	}

@@ -2,4 +2,4 @@
 /test.yaml
 /test/main.go
 /snap.login
-/utils/bindata.go
+/assets/

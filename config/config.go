@@ -2,12 +2,15 @@ package config
 
 import (
 	"fmt"
+	"github.com/IoTDevice/phicomm-r1-controler/utils"
 	adb "github.com/mDNSService/goadb"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"runtime"
 	"sync"
 )
 
@@ -42,11 +45,21 @@ func InitConfigFile() {
 		return
 	}
 	err = WriteConfigFile(ConfigModelVar, ConfigFilePath)
-	if err == nil {
-		fmt.Println("config created")
-		return
+	if err != nil {
+		log.Fatalln("写入配置文件模板出错，请检查本程序是否具有写入权限！或者手动创建配置文件。")
 	}
-	log.Fatalln("写入配置文件模板出错，请检查本程序是否具有写入权限！或者手动创建配置文件。")
+	fmt.Println("config created")
+	//如果是windows系统并且PATH没有adb则自动安装adb
+	if runtime.GOOS == "windows" {
+		if _, err := exec.LookPath("adb.exe"); err != nil {
+			//用户没有预先安装adb
+			err := utils.ExportAdb("./")
+			if err != nil {
+				log.Fatalln(err)
+			}
+			ConfigModelVar.ADBConfig.PathToAdb = "./adb.exe"
+		}
+	}
 }
 
 func UseConfigFile() {
