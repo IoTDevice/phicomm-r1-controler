@@ -47,6 +47,10 @@ func (cm *ConfigModel) RunAdbCmd(cmd []string) (string, error) {
 	return string(outbytes), err
 }
 
+func (cm *ConfigModel) KillAdbServer() (string, error) {
+	return cm.RunAdbCmd([]string{"kill-server"})
+}
+
 func (cm *ConfigModel) StartAdbServer() (string, error) {
 	return cm.RunAdbCmd([]string{"start-server"})
 }

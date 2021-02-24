@@ -12,7 +12,7 @@ import (
 var AndroidAdbDeviceWithOpenIoTHubMap = make(map[string]*config.AndroidAdbDeviceWithOpenIoTHub)
 
 func Run(c *cli.Context) (err error) {
-	out, err := RunAdbCommand([]string{"kill-server"})
+	out, err := config.ConfigModelVar.KillAdbServer()
 	log.Println(out)
 	if err != nil {
 		log.Println(err)
