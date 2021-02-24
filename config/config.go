@@ -10,7 +10,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"runtime"
 	"sync"
 )
 
@@ -22,7 +21,7 @@ var ConfigFileName = "phicomm-r1-controler.yaml"
 var ConfigFilePath = fmt.Sprintf("./%s", ConfigFileName)
 var ConfigModelVar = &ConfigModel{
 	ADBConfig:      &adb.ServerConfig{PathToAdb: ""},
-	NetworkDevices: []string{},
+	NetworkDevices: []string{"192.168.123.146:5555"},
 }
 
 //将配置写入指定的路径的文件
@@ -39,6 +38,18 @@ func WriteConfigFile(ConfigMode *ConfigModel, path string) (err error) {
 }
 
 func InitConfigFile() {
+	//如果是windows系统并且PATH没有adb则自动安装adb
+	//if runtime.GOOS == "windows" {
+	if _, err := exec.LookPath("adb.exe"); err != nil {
+		//用户没有预先安装adb
+		err := utils.ExportAdb("./")
+		if err != nil {
+			log.Fatalln(err)
+		}
+		ConfigModelVar.ADBConfig.PathToAdb = "./adb.exe"
+		log.Printf("%+v", ConfigModelVar.ADBConfig)
+	}
+	//}
 	//	生成配置文件模板
 	err := os.MkdirAll(filepath.Dir(ConfigFilePath), 0644)
 	if err != nil {
@@ -49,17 +60,6 @@ func InitConfigFile() {
 		log.Fatalln("写入配置文件模板出错，请检查本程序是否具有写入权限！或者手动创建配置文件。")
 	}
 	fmt.Println("config created")
-	//如果是windows系统并且PATH没有adb则自动安装adb
-	if runtime.GOOS == "windows" {
-		if _, err := exec.LookPath("adb.exe"); err != nil {
-			//用户没有预先安装adb
-			err := utils.ExportAdb("./")
-			if err != nil {
-				log.Fatalln(err)
-			}
-			ConfigModelVar.ADBConfig.PathToAdb = "./adb.exe"
-		}
-	}
 }
 
 func UseConfigFile() {

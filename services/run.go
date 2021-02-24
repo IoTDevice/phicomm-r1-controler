@@ -29,9 +29,10 @@ func Run(c *cli.Context) (err error) {
 	//连接配置文件的所有网络安卓adb设备
 	if config.SingleIpPort != "" {
 		ConnectOneDevice(adbClient, config.SingleIpPort)
-	}
-	for _, device := range config.ConfigModelVar.NetworkDevices {
-		ConnectOneDevice(adbClient, device)
+	} else {
+		for _, device := range config.ConfigModelVar.NetworkDevices {
+			ConnectOneDevice(adbClient, device)
+		}
 	}
 	devList, err := adbClient.ListDevices()
 	if err != nil {
