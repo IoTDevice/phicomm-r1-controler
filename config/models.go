@@ -73,6 +73,8 @@ func (cm *ConfigModel) ListDevices() (devices []*AdbDeviceInfo, err error) {
 	} else {
 		n = "\n"
 	}
+	out = strings.Replace(out, fmt.Sprintf("%s%s", n, n), "", -1)
+	log.Println(strconv.Quote(out))
 	outN := strings.Split(strings.Trim(strings.TrimSpace(out), n), n)
 	log.Println(outN)
 	log.Println(len(outN))
