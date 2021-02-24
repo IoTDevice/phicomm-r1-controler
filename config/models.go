@@ -73,7 +73,7 @@ func (cm *ConfigModel) ListDevices() (devices []*AdbDeviceInfo, err error) {
 	} else {
 		n = "\n"
 	}
-	outN := strings.Split(strings.Trim(out, n), n)
+	outN := strings.Split(strings.Trim(strings.TrimSpace(out), n), n)
 	log.Println(outN)
 	log.Println(len(outN))
 	for _, line := range outN {
