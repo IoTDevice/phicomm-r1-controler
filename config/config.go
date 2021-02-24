@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"sync"
 )
 
@@ -39,17 +40,17 @@ func WriteConfigFile(ConfigMode *ConfigModel, path string) (err error) {
 
 func InitConfigFile() {
 	//如果是windows系统并且PATH没有adb则自动安装adb
-	//if runtime.GOOS == "windows" {
-	if _, err := exec.LookPath("adb.exe"); err != nil {
-		//用户没有预先安装adb
-		err := utils.ExportAdb("./")
-		if err != nil {
-			log.Fatalln(err)
+	if runtime.GOOS == "windows" {
+		if _, err := exec.LookPath("adb.exe"); err != nil {
+			//用户没有预先安装adb
+			err := utils.ExportAdb("./")
+			if err != nil {
+				log.Fatalln(err)
+			}
+			ConfigModelVar.ADBConfig.PathToAdb = "./adb.exe"
+			log.Printf("%+v", ConfigModelVar.ADBConfig)
 		}
-		ConfigModelVar.ADBConfig.PathToAdb = "./adb.exe"
-		log.Printf("%+v", ConfigModelVar.ADBConfig)
 	}
-	//}
 	//	生成配置文件模板
 	err := os.MkdirAll(filepath.Dir(ConfigFilePath), 0644)
 	if err != nil {
