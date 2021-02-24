@@ -1,15 +1,11 @@
 package services
 
 import (
-	"fmt"
 	"github.com/IoTDevice/phicomm-r1-controler/config"
-	adb "github.com/mDNSService/goadb"
 	"github.com/urfave/cli/v2"
 	"log"
 	"os/exec"
 	"path/filepath"
-	"strconv"
-	"strings"
 	"time"
 )
 
@@ -22,33 +18,33 @@ func Run(c *cli.Context) (err error) {
 		log.Println(err)
 	}
 	//启动adb服务
-	adbClient, err := adb.NewWithConfig(*config.ConfigModelVar.ADBConfig)
+	_, err = config.ConfigModelVar.StartAdbServer()
+	if err != nil {
+		log.Fatalln(err)
+	}
 	if err != nil {
 		return
 	}
 	//连接配置文件的所有网络安卓adb设备
 	if config.SingleIpPort != "" {
-		ConnectOneDevice(adbClient, config.SingleIpPort)
+		ConnectOneDevice(config.SingleIpPort)
 	} else {
 		for _, device := range config.ConfigModelVar.NetworkDevices {
-			ConnectOneDevice(adbClient, device)
+			ConnectOneDevice(device)
 		}
 	}
-	devList, err := adbClient.ListDevices()
+	devList, err := config.ConfigModelVar.ListDevices()
 	if err != nil {
 		log.Fatal(err)
 	}
 	for _, info := range devList {
 		log.Println("List adb devices:")
 		log.Printf("%+v", info)
-		dev := adbClient.Device(adb.DeviceWithSerial(info.Serial))
-		id := fmt.Sprintf("%s-%s", info.Model, info.Serial)
+		id := info.Serial
 		log.Println("id:", id)
 		AndroidAdbDeviceWithOpenIoTHubMap[id] = &config.AndroidAdbDeviceWithOpenIoTHub{
-			Device:   dev,
 			SerialID: info.Serial,
 		}
-		log.Println(id, dev.String())
 	}
 	for _, do := range AndroidAdbDeviceWithOpenIoTHubMap {
 		go do.Reg()
@@ -79,19 +75,9 @@ func RunAdbCommand(args []string) (string, error) {
 	return string(outbytes), err
 }
 
-func ConnectOneDevice(adbClient *adb.Adb, device string) (err error) {
-	log.Println("connecting :", config.SingleIpPort)
-	var ip string
-	var port int
-	if sn := strings.SplitN(device, ":", 2); strings.Contains(device, ":") && len(sn) == 2 {
-		ip = sn[0]
-		port, err = strconv.Atoi(sn[1])
-
-	} else {
-		ip = device
-		port = 5555
-	}
-	err = adbClient.Connect(ip, port)
+func ConnectOneDevice(device string) (err error) {
+	log.Println("connecting :", device)
+	_, err = RunAdbCommand([]string{"connect", device})
 	if err != nil {
 		log.Println(err)
 	}

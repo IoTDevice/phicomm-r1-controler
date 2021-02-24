@@ -14,8 +14,6 @@ github.com/gin-gonic/gin/binding
 github.com/gin-gonic/gin/internal/bytesconv
 github.com/gin-gonic/gin/internal/json
 github.com/gin-gonic/gin/render
-# github.com/go-bindata/go-bindata v3.1.2+incompatible
-## explicit
 # github.com/go-playground/locales v0.13.0
 github.com/go-playground/locales
 github.com/go-playground/locales/currency
@@ -32,11 +30,6 @@ github.com/grandcat/zeroconf
 github.com/json-iterator/go
 # github.com/leodido/go-urn v1.2.0
 github.com/leodido/go-urn
-# github.com/mDNSService/goadb v0.0.0-20210203094918-19a1d1baf045
-## explicit
-github.com/mDNSService/goadb
-github.com/mDNSService/goadb/internal/errors
-github.com/mDNSService/goadb/wire
 # github.com/mattn/go-isatty v0.0.12
 github.com/mattn/go-isatty
 # github.com/miekg/dns v1.1.27
@@ -65,8 +58,7 @@ golang.org/x/net/internal/iana
 golang.org/x/net/internal/socket
 golang.org/x/net/ipv4
 golang.org/x/net/ipv6
-# golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c
-golang.org/x/sys/internal/unsafeheader
+# golang.org/x/sys v0.0.0-20200116001909-b77594299b42
 golang.org/x/sys/unix
 golang.org/x/sys/windows
 # gopkg.in/yaml.v2 v2.2.8

@@ -3,7 +3,6 @@ package config
 import (
 	"fmt"
 	"github.com/IoTDevice/phicomm-r1-controler/utils"
-	adb "github.com/mDNSService/goadb"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
@@ -21,8 +20,12 @@ var SingleServicePort = 0
 var ConfigFileName = "phicomm-r1-controler.yaml"
 var ConfigFilePath = fmt.Sprintf("./%s", ConfigFileName)
 var ConfigModelVar = &ConfigModel{
-	ADBConfig:      &adb.ServerConfig{PathToAdb: ""},
+	ADBConfig:      &ServerConfig{PathToAdb: ""},
 	NetworkDevices: []string{"192.168.123.146:5555"},
+}
+
+type ServerConfig struct {
+	PathToAdb string
 }
 
 //将配置写入指定的路径的文件

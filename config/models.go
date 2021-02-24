@@ -7,7 +7,6 @@ import (
 	"github.com/OpenIoTHub/service-register/nettool"
 	"github.com/gin-gonic/gin"
 	"github.com/grandcat/zeroconf"
-	adb "github.com/mDNSService/goadb"
 	"io/ioutil"
 	"log"
 	"net"
@@ -18,13 +17,62 @@ import (
 	"time"
 )
 
+type AdbDeviceInfo struct {
+	Serial string
+}
+
 type ConfigModel struct {
-	ADBConfig      *adb.ServerConfig
+	ADBConfig      *ServerConfig
 	NetworkDevices []string
 }
 
+func (cm *ConfigModel) RunAdbCmd(cmd []string) (string, error) {
+	var name = "adb"
+	if cm.ADBConfig.PathToAdb != "" {
+		name = cm.ADBConfig.PathToAdb
+	}
+
+	cmdOut := &exec.Cmd{
+		Path: name,
+		Args: append([]string{name}, cmd...),
+	}
+	if filepath.Base(name) == name {
+		if lp, err := exec.LookPath(name); err != nil {
+			return "", err
+		} else {
+			cmdOut.Path = lp
+		}
+	}
+	outbytes, err := cmdOut.Output()
+	return string(outbytes), err
+}
+
+func (cm *ConfigModel) StartAdbServer() (string, error) {
+	return cm.RunAdbCmd([]string{"start-server"})
+}
+
+func (cm *ConfigModel) ListDevices() (devices []*AdbDeviceInfo, err error) {
+	out, err := cm.RunAdbCmd([]string{"devices"})
+	if err != nil {
+		log.Fatalln(err)
+	}
+	//log.Println("ListDevices:")
+	//log.Println(out)
+	out = strings.Replace(out, "List of devices attached", "", -1)
+	//log.Println(out)
+	outN := strings.Split(strings.Trim(out, "\n"), "\n")
+	//log.Println(len(outN))
+	for _, line := range outN {
+		//log.Println(line)
+		serialInfo := strings.SplitN(line, "	", 2)
+		//log.Println(serialInfo[0])
+		devices = append(devices, &AdbDeviceInfo{Serial: serialInfo[0]})
+	}
+
+	return
+}
+
 type AndroidAdbDeviceWithOpenIoTHub struct {
-	*adb.Device
 	SerialID       string
 	listener       net.Listener
 	zeroconfServer *zeroconf.Server
@@ -252,14 +300,10 @@ func (ao *AndroidAdbDeviceWithOpenIoTHub) RunAdbCommand(args []string) (string, 
 	if ConfigModelVar.ADBConfig.PathToAdb != "" {
 		name = ConfigModelVar.ADBConfig.PathToAdb
 	}
-	s, err := ao.Serial()
-	if err != nil {
-		return "", err
-	}
 
 	cmdOut := &exec.Cmd{
 		Path: name,
-		Args: append([]string{name, "-s", s}, args...),
+		Args: append([]string{name, "-s", ao.SerialID}, args...),
 	}
 	if filepath.Base(name) == name {
 		if lp, err := exec.LookPath(name); err != nil {
