@@ -13,6 +13,7 @@ import (
 	"os/exec"
 	"path"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -60,8 +61,9 @@ func (cm *ConfigModel) ListDevices() (devices []*AdbDeviceInfo, err error) {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	//log.Println("ListDevices:")
-	//log.Println(out)
+	s := strconv.Quote(out)
+	log.Println("ListDevices:")
+	log.Println(s)
 	out = strings.Replace(out, "List of devices attached", "", -1)
 	//log.Println(out)
 	outN := strings.Split(strings.Trim(out, "\n"), "\n")
