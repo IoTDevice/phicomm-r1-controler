@@ -13,6 +13,7 @@ import (
 	"os/exec"
 	"path"
 	"path/filepath"
+	"runtime"
 	"strconv"
 	"strings"
 	"time"
@@ -66,11 +67,18 @@ func (cm *ConfigModel) ListDevices() (devices []*AdbDeviceInfo, err error) {
 	log.Println(s)
 	out = strings.Replace(out, "List of devices attached", "", -1)
 	//log.Println(out)
-	outN := strings.Split(strings.Trim(out, "\n"), "\n")
-	//log.Println(len(outN))
+	var n string
+	if runtime.GOOS == "windows" {
+		n = "\r\n"
+	} else {
+		n = "\n"
+	}
+	outN := strings.Split(strings.Trim(out, n), n)
+	log.Println(outN)
+	log.Println(len(outN))
 	for _, line := range outN {
 		//log.Println(line)
-		serialInfo := strings.SplitN(line, "	", 2)
+		serialInfo := strings.SplitN(line, "\t", 2)
 		//log.Println(serialInfo[0])
 		if strconv.QuoteToGraphic(serialInfo[0]) == "" {
 			continue
