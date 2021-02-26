@@ -12,7 +12,8 @@
 * （本插件可以通过 -c 参数指定配置文件位置）
 * 安装运行本插件之后将装有云易连的手机与本插件在同一个网络下操作，云易连可以发现配置的R1设备
 * 如果你想云易连的手机和插件不是同一个网络也能控制，请安装[云易连网关](https://github.com/OpenIoTHub/gateway-go/releases) 如果只需要局域网控制请忽略
-docker 运行：
+更多说明：https://www.right.com.cn/forum/thread-4080728-1-1.html
+#### docker 运行：
 ```batch
 docker run -d -p 2847:2847 openiothub/phicomm-r1-controler:latest r1-ip -i {这里是你的斐讯R1的ip} - p 2847
 ```
