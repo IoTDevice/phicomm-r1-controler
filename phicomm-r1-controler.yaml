@@ -1,7 +1,4 @@
 adbconfig:
   pathtoadb: ""
-  host: ""
-  port: 0
-  dialer: null
 networkdevices:
 - 192.168.123.146:5555
